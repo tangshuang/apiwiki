@@ -1,0 +1,544 @@
+<extend name="Public/admin"/>
+
+<block name="title">
+    <title>{$title} - ApiWiki</title>
+</block>
+
+<block name="head">
+    <link rel="stylesheet" href="__AM__/css/admin.css">
+    <style>
+        .table-main {
+            border: #E6E6E6 solid 1px;
+        }
+        .table-main td {
+            font-size: .8em;
+            word-break: break-all;
+        }
+        .am-modal-bd .am-u-sm-9, .am-modal .am-u-sm-9 {
+            text-align: left !important;
+        }
+        .am-modal-hd {
+            border-bottom: #ccc solid 1px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            font-weight: bold;
+        }
+        .deep td:first-child em {
+            display: inline-block;
+            width: 1em;
+        }
+        .am-popover {
+            z-index: 3000;
+        }
+        .dialog-scroll-area {
+            height: 400px;
+            overflow-x: hidden;
+        }
+        .am-modal button[type=submit] {
+            margin-top: 20px;
+        }
+    </style>
+</block>
+
+<block name="submenu">
+    <notempty name="project">
+        <div class="am-panel am-panel-default admin-sidebar-panel">
+            <ul class="am-list admin-sidebar-list">
+                <include file="Public:projectMenu"/>
+            </ul>
+        </div>
+    </notempty>
+</block>
+
+<block name="body">
+    <div class="am-cf am-padding">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong> / <small><notempty name="project">{$project.title} /</notempty> {$title}</small></div>
+    </div>
+
+    <hr/>
+
+    <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-8 am-u-sm-centered">
+            <form class="am-form" action="" method="post">
+                <div class="am-form-group">
+                    <label for="title" class="am-form-label">接口名称</label>
+                    <input type="text" id="title" name="title" placeholder="" value="{$interface.title}">
+                    <small>输入接口名称。</small>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="description" class="am-form-label">接口描述</label>
+                    <textarea class="" rows="5" id="description" name="description" placeholder="">{$interface.description}</textarea>
+                    <small>对接口的简单描述，200字以内，支持HTML。</small>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="url" class="am-form-label">URL</label>
+                    <div class="am-u-sm-12 am-padding-0">
+                        <div class="am-u-sm-4 am-padding-0">
+                            <input type="text" value="{$project.base_url}" disabled>
+                        </div>
+                        <div class="am-u-sm-8 am-padding-0">
+                            <input type="text" id="url" name="url" placeholder="/add" value="{$interface.url}">
+                        </div>
+                    </div>
+                    <div class="am-cf"></div>
+                    <small>该接口通过http可以访问的URL地址。</small>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="method" class="am-form-label">请求模式</label>
+                    <select name="method">
+                        <option value="1" <eq name="interface.method" value="1">selected</eq>>GET</option>
+                        <option value="2" <eq name="interface.method" value="2">selected</eq>>POST</option>
+                        <option value="3" <eq name="interface.method" value="3">selected</eq>>PUT</option>
+                    </select>
+                </div>
+
+                <notempty name="interface">
+
+
+
+                <div class="am-form-group">
+                    <a type="button" class="am-btn am-btn-default am-fr"
+                       data-am-modal="{target: '#data-dialog', closeViaDimmer: 0, width: 800, height: 570}"
+                       data-info='"dialogTitle":"添加传入参数",
+                                  "action":"{:U("Interface/addData",array("pid" => $project["id"],"type" => "parameter"))}",
+                                  "do":"add",
+                                  "target":"#param-table"'><span class="am-icon-plus"></span> 添加参数</a>
+                    <label class="am-form-label">传入参数</label>
+                    <table class="am-table am-table-hover table-main" id="param-table">
+                        <thead>
+                        <tr>
+                            <th width="120">字段</th>
+                            <th width="120">名称</th>
+                            <th width="80">是否必填</th>
+                            <th width="80">数据类型</th>
+                            <th width="150">示例</th>
+                            <th>描述</th>
+                            <th width="125">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {:R('Interface/dataTree',array($interParam,0,'parameter'))}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="am-form-group">
+                    <a type="button" class="am-btn am-btn-default am-fr"
+                       data-am-modal="{target: '#data-dialog', closeViaDimmer: 0, width: 800, height: 570}"
+                       data-info='"dialogTitle":"添加返回值",
+                                  "action":"{:U("Interface/addData",array("pid" => $project["id"],"type" => "return_data"))}",
+                                  "do":"add",
+                                  "target":"#return-data-table"'><span class="am-icon-plus"></span> 添加返回值</a>
+                    <label class="am-form-label">返回值</label>
+                    <table class="am-table am-table-hover table-main" id="return-data-table">
+                        <thead>
+                        <tr>
+                            <th width="120">字段</th>
+                            <th width="120">名称</th>
+                            <th width="80">是否必填</th>
+                            <th width="80">数据类型</th>
+                            <th width="150">示例</th>
+                            <th>描述</th>
+                            <th width="125">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {:R('Interface/dataTree',array($returnData,0,'return_data'))}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="am-form-group">
+                    <a type="button" class="am-btn am-btn-default am-fr"
+                       data-am-modal="{target: '#error-dialog', closeViaDimmer: 0, width: 800, height: 570}"
+                       data-info='"type":"error",
+                                  "dialog":"#error-dialog",
+                                  "form":"#error-dialog-form",
+                                  "dialogTitle":"添加错误码",
+                                  "action":"{:U("Interface/addData",array("pid" => $project["id"],"type" => "error"))}",
+                                  "do":"add",
+                                  "target":"#error-table"'><span class="am-icon-plus"></span> 添加错误码</a>
+                    <label class="am-form-label">错误码</label>
+                    <table class="am-table am-table-hover table-main" id="error-table">
+                        <thead>
+                        <tr>
+                            <th>error_code</th>
+                            <th>error_msg</th>
+                            <th>原因</th>
+                            <th>解决方案</th>
+                            <th width="120">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <volist name="errorData" id="error">
+                            <tr>
+                                <td>{$error.code}</td>
+                                <td>{$error.msg}</td>
+                                <td>{$error.reason}</td>
+                                <td>{$error.solution}</td>
+                                <td>
+                                    <div class="am-btn-toolbar">
+                                        <div class="am-btn-group am-btn-group-xs">
+                                            <a class="am-btn am-btn-default am-btn-xs"
+                                               data-am-modal="{target: '#error-dialog', closeViaDimmer: 0, width: 800, height: 570}"
+                                               data-info='"type":"error",
+                                                          "dialog":"#error-dialog",
+                                                          "form":"#error-dialog-form",
+                                                          "dialogTitle":"编辑接口的错误码",
+                                                          "action":"{:U("Interface/editData",array("pid" => $project["id"],"type" => "error"))}",
+                                                          "id":"{$error.id}",
+                                                          "code":"{$error.code}",
+                                                          "msg":"{$error.msg}",
+                                                          "reason":"{$error.reason|trim|str_replace="\n"," ",###}",
+                                                          "solution":"{$error.solution|trim|str_replace="\n"," ",###}",
+                                                          "sort":"{$error.sort}",
+                                                          "is_global":"{$error.is_global}",
+                                                          "do":"edit",
+                                                          "target":"#error-table"'><span class="am-icon-edit"></span></a>
+                                            <a class="am-btn am-btn-default am-btn-xs confirm" href="javascript:void(0)" data-ajax-url="{:U('deleteData',array('pid' => $project['id'],'type' => 'error','id' => $error['id']))}"><span class="am-icon-trash-o"></span></a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                    <small>这里添加的错误码，会在错误码列表中统一展示。</small>
+                </div>
+
+
+                </notempty>
+
+
+                <div class="am-form-group">
+                    <label for="sort" class="am-form-label">排序值</label>
+                    <input type="text" id="sort" name="sort" placeholder="" value="{$interface.sort}">
+                    <small>值越大，排的越靠前。</small>
+                </div>
+
+                <br><br><br>
+
+
+                <div class="am-form-group">
+                    <notempty name="interface">
+                        <div class="am-u-sm-12 am-padding-0">
+                            <div class="am-u-sm-6 am-padding-0">
+                                <button type="submit" class="am-btn am-btn-lg am-btn-block am-btn-primary">提 交</button>
+                            </div>
+                            <div class="am-u-sm-6 am-padding-0">
+                                <a href="{:U('Index/detail',array('tid' => $interface['id']))}" target="_blank" class="am-btn am-btn-lg am-btn-block am-btn-success">预 览</a>
+                            </div>
+                        </div>
+                    <else/>
+                        <button type="submit" class="am-btn am-btn-lg am-btn-block am-btn-primary">提 交</button>
+                    </notempty>
+                </div>
+
+                <input type="hidden" name="id" value="{$interface.id}">
+                <input type="hidden" name="project_id" value="{$project.id}">
+            </form>
+        </div>
+    </div>
+
+    <br/><br/>
+
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="data-dialog">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">
+                <span class="dialog-title" id="data-dialog-title"></span>
+                <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+            </div>
+            <div class="am-modal-bd" id="data-dialog-content">
+                <div class="am-g">
+                    <div class="am-u-md-12">
+
+                        <form class="am-form am-form-horizontal" method="post" id="data-dialog-form">
+                            <div class="dialog-scroll-area">
+                                <div class="am-form-group">
+                                    <label for="field" class="am-u-sm-3 am-form-label">参数字段</label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" id="field" name="field" placeholder="field" value="">
+                                        <small>输入字段，也可以称为“键名”。</small>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label for="data_title" class="am-u-sm-3 am-form-label">参数名称</label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" id="data_title" name="title" placeholder="名称" value="">
+                                        <small>输入参数名称。</small>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label for="required" class="am-u-sm-3 am-form-label">是否必填</label>
+                                    <div class="am-u-sm-9">
+                                        <select name="required" id="required">
+                                            <option value="1">必填</option>
+                                            <option value="0">选填</option>
+                                        </select>
+                                        <small>提交该参数时，是否必须提交。</small>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label for="dataType" class="am-u-sm-3 am-form-label">数据类型</label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" id="dataType" name="data_type" placeholder="string(32)" value="">
+                                        <small>告诉开发者，这个参数应该是什么数据类型，选填。</small>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label for="example" class="am-u-sm-3 am-form-label">示例</label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" id="example" name="example" placeholder="" value="">
+                                        <small>给一个示例值。</small>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label for="detail" class="am-u-sm-3 am-form-label">详细阐述</label>
+                                    <div class="am-u-sm-9">
+                                        <textarea name="detail" id="detail"></textarea>
+                                        <small>对该参数的详细描述，支持html标签。</small>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label for="sort" class="am-u-sm-3 am-form-label">排序值</label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" id="sort" name="sort" placeholder="0" value="">
+                                        <small>值越大，排的越靠前。</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="am-form-group">
+                                <div class="am-u-sm-9 am-u-sm-push-3">
+                                    <button type="submit" class="am-btn am-btn-lg am-btn-primary">提 交</button>
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="project_id" value="{$project.id}">
+                            <input type="hidden" name="interface_id" value="{$interface.id}">
+
+                            <input type="hidden" name="id" value="">
+                            <input type="hidden" name="parent_id" value="">
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="error-dialog">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">
+                <span class="dialog-title" id="error-dialog-title"></span>
+                <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+            </div>
+            <div class="am-modal-bd" id="error-dialog-content">
+                <div class="am-g">
+                    <div class="am-u-md-12">
+
+                        <form class="am-form am-form-horizontal" method="post" id="error-dialog-form">
+                            <div class="dialog-scroll-area">
+                                <div class="am-form-group">
+                                    <label for="code" class="am-u-sm-3 am-form-label">error_code</label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" id="code" name="code" placeholder="6003" value="">
+                                        <small>错误码。</small>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label for="msg" class="am-u-sm-3 am-form-label">error_msg</label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" id="msg" name="msg" placeholder="令牌错误" value="">
+                                        <small>返回的错误提示文本信息。</small>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label for="reason" class="am-u-sm-3 am-form-label">原因</label>
+                                    <div class="am-u-sm-9">
+                                        <textarea name="reason" id="reason"></textarea>
+                                        <small>引起该错误码的可能原因，支持html标签。</small>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label for="solution" class="am-u-sm-3 am-form-label">解决办法</label>
+                                    <div class="am-u-sm-9">
+                                        <textarea name="solution" id="solution"></textarea>
+                                        <small>解决该问题的办法，支持html标签。</small>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label for="sort" class="am-u-sm-3 am-form-label">排序值</label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" id="sort" name="sort" placeholder="0" value="">
+                                        <small>值越大，排的越靠前。</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="am-form-group">
+                                <div class="am-u-sm-9 am-u-sm-push-3">
+                                    <button type="submit" class="am-btn am-btn-lg am-btn-primary">提 交</button>
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="project_id" value="{$project.id}">
+                            <input type="hidden" name="interface_id" value="{$interface.id}">
+
+                            <input type="hidden" name="id" value="">
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</block>
+
+<block name="script">
+    <script>
+        // 点击打开模态弹出框
+        $(document).on('click','.am-btn[data-am-modal][data-info]',function(){
+            var data = '{' + $(this).attr('data-info') + '}';
+            var $data = JSON.parse(data);
+            var $form = $data.form == undefined ? $('#data-dialog-form') : $($data.form);
+            var $dialog = $data.dialog == undefined ? $('#data-dialog') : $($data.dialog);
+
+            $dialog.find('.dialog-title').text($data.dialogTitle);
+            $form.attr('action',$data.action);
+            $form[0].reset();
+
+            $('[data-to-reload]').removeAttr('data-to-reload'); // 先将所有属性清除
+
+            if($data.type == 'error') {
+
+                console.log($data);
+
+                if($data.do == 'add') {
+                    $form.find('[name=id]').val('');
+                }
+                else if($data.do == 'edit') {
+                    $form.find('[name=code]').val($data.code);
+                    $form.find('[name=msg]').val($data.msg);
+                    $form.find('[name=reason]').val($data.reason);
+                    $form.find('[name=solution]').val($data.solution);
+                    $form.find('[name=sort]').val($data.sort);
+                    $form.find('[name=is_global] option').each(function(){
+                        var value = $(this).val();
+                        $(this).prop('selected',false);
+                        if($data.is_global == value) $(this).prop('selected',true);
+                    });
+
+                    $form.find('[name=id]').val($data.id);
+                }
+                $($data.target).attr('data-to-reload','true');
+            }
+            else if($data.do == 'add') {
+                $form.find('[name=id]').val('');
+                $form.find('[name=parent_id]').val('');
+
+                $($data.target).attr('data-to-reload','true');
+            }
+            else if($data.do == 'addSub') {
+                $form.find('[name=id]').val('');
+                $form.find('[name=parent_id]').val($data.parent_id);
+
+                $(this).parent().parent().parent().parent() // tr
+                        .parent() // tbody
+                        .parent() // table
+                        .attr('data-to-reload','true');
+            }
+            else if($data.do == 'edit') {
+                $form.find('[name=field]').val($data.field);
+                $form.find('[name=title]').val($data.title);
+                $form.find('[name=required] option').each(function(){
+                    var value = $(this).val();
+                    $(this).prop('selected',false);
+                    if($data.required == value) $(this).prop('selected',true);
+                });
+                $form.find('[name=data_type]').val($data.data_type);
+                $form.find('[name=example]').val($data.example);
+                $form.find('[name=detail]').val($data.detail);
+                $form.find('[name=sort]').val($data.sort);
+
+                $form.find('[name=id]').val($data.id);
+                $form.find('[name=parent_id]').val($data.parent_id);
+
+                $(this).parent().parent().parent().parent() // tr
+                        .parent() // tbody
+                        .parent() // table
+                        .attr('data-to-reload','true');
+            }
+        });
+        // 提交模态弹出框表单
+        $('#data-dialog-form,#error-dialog-form').on('submit',function(){
+            var $this = $(this),action = $this.attr('action'),$data = $this.serialize();
+            $.post(action,$data,function(result){ // 提交到后台进行添加
+                if(result.status == 1) { // 添加成功
+                    var url = window.location.href;
+                    $.get(url,function(result){ // 重新获取当前页面的html，并抓取对应的区域内的HTML进行替换，从而实现无刷新页面加载
+                        var table_id = '#' + $('[data-to-reload=true]').attr('id');
+                        var $html = $(result),html = $html.find(table_id).html();
+                        $(table_id).html(html);
+                        $(table_id).removeAttr('data-to-reload');
+                        $this[0].reset();
+                        $('#data-dialog,#error-dialog').modal('close');
+                    });
+                }
+                else { // 添加失败
+                    $this.popover({
+                        content: '提交失败，请重试'
+                    });
+                    $this.popover('open');
+                    setTimeout(function(){
+                        $this.popover('close');
+                    },3000);
+                }
+            });
+            return false;
+        });
+        // 静态删除参数
+        $(document).on('click','a[data-ajax-url]',function(e){
+            e.preventDefault();
+            var $this = $(this),url = $this.attr('data-ajax-url'), $node = $this.parent().parent().parent().parent();
+            $confirm = $('#my-confirm');
+            $confirm.find('.am-modal-hd').text('删除提示');
+            $confirm.find('.am-modal-bd').html('删除后数据将无法恢复，相关子元素也会被一并删除，请谨慎操作！<br>确定删除吗？')
+            $confirm.modal({
+                relatedTarget: this,
+                onConfirm: function(options) {
+                    $.get(url,function(result){
+                        if(result.status == 1) {
+                            $node.remove();
+                        }
+                        else {
+                            $this.popover({
+                                content: '删除失败，请重试'
+                            });
+                            $this.popover('open');
+                            setTimeout(function(){
+                                $this.popover('close');
+                            },3000);
+                        }
+                    });
+                },
+                onCancel: function() {}
+            });
+        });
+    </script>
+</block>

@@ -1,0 +1,44 @@
+<?php $current = ' <span class="am-icon-check am-fr am-margin-right admin-icon-yellow"></span>'; $controller = CONTROLLER_NAME; $action = ACTION_NAME; ?>
+
+<li>
+    <a href="{:U('Project/index',array('pid' => $project['id']))}">
+        <span class="am-icon-home"></span>
+        项目概览
+        <if condition="$controller eq 'Project' AND $action eq 'index'">{$current}</if>
+    </a>
+</li>
+<li>
+    <a href="{:U('Interface/index',array('pid' => $project['id']))}">
+        <span class="am-icon-fire"></span>
+        接口管理
+        <if condition="$controller eq 'Interface' AND $action neq 'errorCodes'">{$current}</if>
+    </a>
+</li>
+<li>
+    <a href="{:U('Interface/errorCodes',array('pid' => $project['id']))}">
+        <span class="am-icon-exclamation-triangle"></span>
+        错误码管理
+        <if condition="$controller eq 'Interface' AND $action eq 'errorCodes'">{$current}</if>
+    </a>
+</li>
+<li>
+    <a href="{:U('Project/member',array('pid' => $project['id']))}">
+        <span class="am-icon-group"></span>
+        成员管理
+        <if condition="$controller eq 'Project' AND $action eq 'member'">{$current}</if>
+    </a>
+</li>
+<li>
+    <a href="{:U('Document/index',array('pid' => $project['id']))}">
+        <span class="am-icon-file"></span>
+        文档管理
+        <if condition="$controller eq 'Document'">{$current}</if>
+    </a>
+</li>
+<li>
+    <a href="{:U('Project/setting',array('pid' => $project['id']))}">
+        <span class="am-icon-gear"></span>
+        项目设置
+        <if condition="$controller eq 'Project' AND $action eq 'setting'">{$current}</if>
+    </a>
+</li>

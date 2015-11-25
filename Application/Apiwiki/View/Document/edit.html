@@ -1,0 +1,93 @@
+<extend name="Public/admin"/>
+
+<block name="title">
+    <title>{$title} - ApiWiki</title>
+</block>
+
+<block name="head">
+    <link rel="stylesheet" href="__AM__/css/admin.css">
+</block>
+
+<block name="submenu">
+    <notempty name="project">
+        <div class="am-panel am-panel-default admin-sidebar-panel">
+            <ul class="am-list admin-sidebar-list">
+                <include file="Public:projectMenu"/>
+            </ul>
+        </div>
+    </notempty>
+</block>
+
+<block name="body">
+    <div class="am-cf am-padding">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong> / <small><notempty name="project">{$project.title} /</notempty> {$title}</small></div>
+    </div>
+
+    <hr/>
+
+    <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-8 am-u-sm-centered">
+            <form class="am-form" action="" method="post">
+                <div class="am-form-group">
+                    <label for="title" class="am-form-label">标题</label>
+                    <input type="text" id="title" name="title" placeholder="" value="{$document.title}">
+                </div>
+
+                <div class="am-form-group">
+                    <label for="detail" class="am-form-label">详情</label>
+                    <textarea class="" rows="5" id="detail" name="detail" placeholder="">{$document.detail}</textarea>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="sort" class="am-form-label">排序值</label>
+                    <input type="text" id="sort" name="sort" placeholder="" value="{$document.sort}">
+                    <small>值越大，排的越靠前。</small>
+                </div>
+
+                <br><br><br>
+
+
+                <div class="am-form-group">
+                    <notempty name="document">
+                        <div class="am-u-sm-12 am-padding-0">
+                            <div class="am-u-sm-6 am-padding-0">
+                                <button type="submit" class="am-btn am-btn-lg am-btn-block am-btn-primary">提 交</button>
+                            </div>
+                            <div class="am-u-sm-6 am-padding-0">
+                                <a href="{:U('Index/document',array('id' => $document['id']))}" target="_blank" class="am-btn am-btn-lg am-btn-block am-btn-success">预 览</a>
+                            </div>
+                        </div>
+                        <else/>
+                        <button type="submit" class="am-btn am-btn-lg am-btn-block am-btn-primary">提 交</button>
+                    </notempty>
+                </div>
+
+                <input type="hidden" name="id" value="{$document.id}">
+                <input type="hidden" name="project_id" value="{$project.id}">
+            </form>
+        </div>
+    </div>
+
+    <br/><br/>
+
+</block>
+
+<block name="script">
+    <script src="__STATIC__/jquery.form.js"></script>
+    <script src="__ASSETS__/TinymceEditor/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: "#detail",
+            language : "zh_CN",
+            language_url : "__ASSETS__/TinymceEditor/langs/zh_CN.js",
+            menubar: false,
+            convert_urls: false,
+            height: 450,
+            plugins: [
+                "link imageupload"
+            ],
+            toolbar: "undo redo | imageupload link | bold italic | alignleft aligncenter alignright alignjustify",
+            imageupload_url: '{:U("File/uploadPicture")}'
+        });
+    </script>
+</block>

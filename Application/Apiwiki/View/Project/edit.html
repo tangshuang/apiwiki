@@ -1,0 +1,90 @@
+<extend name="Public/admin"/>
+
+<block name="title">
+    <title>{$title} - ApiWiki</title>
+</block>
+
+<block name="head">
+    <link rel="stylesheet" href="__AM__/css/admin.css">
+</block>
+
+<block name="submenu">
+    <notempty name="project">
+    <div class="am-panel am-panel-default admin-sidebar-panel">
+        <ul class="am-list admin-sidebar-list">
+            <include file="Public:projectMenu"/>
+        </ul>
+    </div>
+    </notempty>
+</block>
+
+<block name="body">
+    <div class="am-cf am-padding">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong> / <small><notempty name="project">{$project.title} /</notempty> {$title}</small></div>
+    </div>
+
+    <hr/>
+
+    <div class="am-g">
+    <div class="am-u-sm-12 am-u-md-8">
+        <form class="am-form am-form-horizontal" action="" method="post" enctype="multipart/form-data">
+            <div class="am-form-group">
+                <label for="title" class="am-u-sm-3 am-form-label">项目名称</label>
+                <div class="am-u-sm-9">
+                    <input type="text" id="title" name="title" placeholder="" value="{$project.title}">
+                    <small>输入项目名称。</small>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label for="description" class="am-u-sm-3 am-form-label">项目简介</label>
+                <div class="am-u-sm-9">
+                    <textarea class="" rows="5" id="description" name="description" placeholder="">{$project.description}</textarea>
+                    <small>对项目的简单描述，100字以内。</small>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label for="base_url" class="am-u-sm-3 am-form-label">Base URL</label>
+                <div class="am-u-sm-9">
+                    <input type="url" id="base_url" name="base_url" placeholder="http://api.xxx.com" value="{$project.base_url}">
+                    <small>API接口的访问URL默认根目录，以http://或https://开头，末尾不要有/。</small>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label for="logo" class="am-u-sm-3 am-form-label">项目LOGO</label>
+                <div class="am-u-sm-9">
+                    <notempty name="project.logo_url"><img src="{:U($project['logo_url'],'','')}" width="60" height="60" style="margin-bottom: 10px;"></notempty>
+                    <input type="file" id="logo" name="logo">
+                    <p class="am-form-help">请选择要上传的文件...</p>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label for="read_level" class="am-u-sm-3 am-form-label">阅读权限</label>
+                <div class="am-u-sm-9">
+                    <select name="read_level" id="read_level">
+                        <option value="0" <eq name="project.read_level" value="0">selected</eq>>所有用户可读</option>
+                        <option value="1" <eq name="project.read_level" value="1">selected</eq>>项目成员可读</option>
+                        <option value="2" <eq name="project.read_level" value="2">selected</eq>>只有自己可读</option>
+                    </select>
+                    <small>项目接口详情页的可读权限。</small>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <div class="am-u-sm-9 am-u-sm-push-3">
+                    <button type="submit" class="am-btn am-btn-lg am-btn-primary am-fl">提 交</button>
+                    <notempty name="project"><a href="{:U('delete',array('pid' => $project['id']))}" class="am-btn am-btn-danger am-btn-lg am-fl alert-confirm">删 除</a></notempty>
+                </div>
+            </div>
+
+            <notempty name="project"><input type="hidden" name="id" value="{$project.id}"></notempty>
+        </form>
+    </div>
+    </div>
+
+    <br/><br/>
+
+</block>

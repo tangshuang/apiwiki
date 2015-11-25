@@ -1,0 +1,61 @@
+<extend name="Public/base"/>
+
+<block name="title">
+    <title>{$title} - ApiWiki</title>
+</block>
+
+<block name="head">
+    <style>
+        .header {
+            text-align: center;
+            margin-top: 1.6rem;
+        }
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            font-weight: normal;
+            margin: 0;
+            padding: 0;
+        }
+        .header p {
+            font-size: 14px;
+        }
+        em {
+            display: inline-block;
+            width: 1em;
+        }
+    </style>
+</block>
+
+<block name="body">
+    <div class="header">
+        <h1>Api Wiki</h1>
+    </div>
+    <hr />
+    <div class="am-g">
+        <div class="am-u-lg-8 am-u-md-8 am-u-sm-centered">
+            <h2>{$title}</h2>
+            <p>{$project.description}</p>
+
+            <br>
+            <h4>接口列表</h4>
+            <ul>
+                <volist name="items" id="item">
+                    <li><a href="{:U('item',array('pid' => $project['id'],'id' => $item['id']))}">{$item.title}</a></li>
+                </volist>
+            </ul>
+            <h4>文档列表</h4>
+            <ul>
+                <volist name="docs" id="item">
+                    <li><a href="{:U('doc',array('pid' => $project['id'],'id' => $item['id']))}">{$item.title}</a></li>
+                </volist>
+            </ul>
+            <br>
+        </div>
+    </div>
+
+    <br/><br/>
+
+    <hr>
+    <p align="center">© 2015 ApiWiki. Licensed under MIT license.</p>
+</block>

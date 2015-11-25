@@ -1,0 +1,180 @@
+<extend name="Public/admin"/>
+
+<block name="title">
+    <title>{$title} - ApiWiki</title>
+</block>
+
+<block name="head">
+    <link rel="stylesheet" href="__AM__/css/admin.css">
+    <style>
+        .am-modal-bd .am-u-sm-9, .am-modal .am-u-sm-9 {
+            text-align: left !important;
+        }
+        .am-modal-hd {
+            border-bottom: #ccc solid 1px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            font-weight: bold;
+        }
+        .am-popover {
+            z-index: 3000;
+        }
+    </style>
+</block>
+
+<block name="submenu">
+    <div class="am-panel am-panel-default admin-sidebar-panel">
+        <ul class="am-list admin-sidebar-list">
+            <include file="Public:projectMenu"/>
+        </ul>
+    </div>
+</block>
+
+<block name="body">
+    <div class="am-cf am-padding">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong> / <small>{$project.title} / {$title}</small></div>
+    </div>
+
+    <hr/>
+
+    <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-6">
+            <div class="am-btn-toolbar">
+                <div class="am-btn-group am-btn-group-xs">
+                    <a type="button" class="am-btn am-btn-default" data-am-modal="{target: '#data-dialog', closeViaDimmer: 0, width: 600, height: 250}"><span class="am-icon-plus"></span> 新增</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="am-g">
+        <div class="am-u-sm-12">
+            <form class="am-form">
+                <table class="am-table am-table-hover table-main" id="members-table">
+                    <thead>
+                    <tr>
+                        <th class="table-id">序号</th>
+                        <th class="table-title">名称</th>
+                        <th>Email</th>
+                        <th width="160">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="items" id="item">
+                        <tr>
+                            <td>{$key+1}</td>
+                            <td>{$item.user_name}</td>
+                            <td>{$item.user_email}</td>
+                            <td>
+                                <div class="am-btn-toolbar">
+                                    <div class="am-btn-group am-btn-group-xs">
+                                        <a class="am-btn am-btn-default am-btn-xs dialog-confirm" href="{:U('deleteMember',array('pid' => $project['id'],'uid' => $item['id']))}"><span class="am-icon-trash-o"></span></a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <br/><br/>
+
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="data-dialog">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">
+                <span class="dialog-title" id="data-dialog-title">添加成员</span>
+                <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+            </div>
+            <div class="am-modal-bd" id="data-dialog-content">
+                <div class="am-g">
+                    <div class="am-u-md-12">
+
+                        <form class="am-form am-form-horizontal" action="{:U('addMember')}" method="post" id="data-dialog-form">
+                            <div class="am-form-group">
+                                <label for="user_email" class="am-u-sm-3 am-form-label">用户邮箱</label>
+                                <div class="am-u-sm-9">
+                                    <input type="text" id="user_email" name="user_email" placeholder="user@email.com" value="">
+                                    <small>你想让谁成为该项目的成员？输入该用户登陆本系统的邮箱即可。</small>
+                                </div>
+                            </div>
+
+                            <div class="am-form-group">
+                                <div class="am-u-sm-9 am-u-sm-push-3">
+                                    <button type="submit" class="am-btn am-btn-lg am-btn-primary">提 交</button>
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="pid" value="{$project.id}">
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</block>
+
+<block name="script">
+    <script>
+        $(document).ready(function(){
+            // 提交模态弹出框表单
+            $('#data-dialog-form').on('submit',function(){
+
+                var $this = $(this),action = $this.attr('action'),$data = $this.serialize();
+                $.post(action,$data,function(result){ // 提交到后台进行添加
+                    if(result.status == 1) { // 添加成功
+                        var url = window.location.href;
+                        $.get(url,function(result){ // 重新获取当前页面的html，并抓取对应的区域内的HTML进行替换，从而实现无刷新页面加载
+                            var $html = $(result), html = $html.find('#members-table').html();
+                            $('#members-table').html(html);
+                            $this[0].reset();
+                            $('#data-dialog').modal('close');
+                        });
+                    }
+                    else { // 添加失败
+                        $this.popover({
+                            content: '提交失败，请重试'
+                        });
+                        $this.popover('open');
+                        setTimeout(function(){
+                            $this.popover('close');
+                        },3000);
+                    }
+                });
+                return false;
+            });
+        });
+        // 静态删除参数
+        $(document).on('click','a.dialog-confirm',function(e){
+            e.preventDefault();
+            var $this = $(this),url = $this.attr('href'), $node = $this.parent().parent().parent().parent();
+            $confirm = $('#my-confirm');
+            $confirm.find('.am-modal-hd').text('删除提示');
+            $confirm.find('.am-modal-bd').html('删除后数据将无法恢复，相关子元素也会被一并删除，请谨慎操作！<br>确定删除吗？')
+            $confirm.modal({
+                relatedTarget: this,
+                onConfirm: function(options) {
+                    $.get(url,function(result){
+                        if(result.status == 1) {
+                            $node.remove();
+                        }
+                        else {
+                            $this.popover({
+                                content: '删除失败，请重试'
+                            });
+                            $this.popover('open');
+                            setTimeout(function(){
+                                $this.popover('close');
+                            },3000);
+                        }
+                    });
+                },
+                onCancel: function() {}
+            });
+        });
+    </script>
+</block>

@@ -1,0 +1,128 @@
+<extend name="Public/base"/>
+
+<block name="title">
+    <title>{$title} - ApiWiki</title>
+</block>
+
+<block name="head">
+    <style>
+        .header {
+            text-align: center;
+            margin-top: 1.6rem;
+        }
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            font-weight: normal;
+            margin: 0;
+            padding: 0;
+        }
+        em {
+            display: inline-block;
+            width: 1em;
+        }
+        .table-main {
+            border: #E6E6E6 solid 1px;
+        }
+        .table-main td {
+            font-size: .8em;
+            word-break: break-all;
+        }
+        .am-modal-bd .am-u-sm-9, .am-modal .am-u-sm-9 {
+            text-align: left !important;
+        }
+        .am-modal-hd {
+            border-bottom: #ccc solid 1px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            font-weight: bold;
+        }
+        .deep td:first-child em {
+            display: inline-block;
+            width: 1em;
+        }
+        .am-popover {
+            z-index: 3000;
+        }
+
+        table th {
+            border: 0 !important;
+            background: #f1f1f1;
+            font-weight: normal;
+        }
+
+    </style>
+</block>
+
+<block name="submenu">
+    <notempty name="project">
+        <div class="am-panel am-panel-default admin-sidebar-panel">
+            <ul class="am-list admin-sidebar-list">
+                <include file="Public:projectMenu"/>
+            </ul>
+        </div>
+    </notempty>
+</block>
+
+<block name="body">
+    <div class="header">
+        <h1>Api Wiki</h1>
+    </div>
+    <hr />
+    <div class="am-g">
+        <div class="am-u-sm-3 am-u-md-3">
+            <h2>{$project.title}</h2>
+            <p><strong>接口</strong></p>
+            <ul>
+                <volist name="list" id="vo">
+                    <li><a href="{:U('item',array('pid' => $project['id'],'id' => $vo['id']))}">{$vo.title}</a></li>
+                </volist>
+            </ul>
+            <p><strong>文档</strong></p>
+            <ul>
+                <volist name="docs" id="doc">
+                    <li><a href="{:U('doc',array('pid' => $project['id'],'id' => $doc['id']))}">{$doc.title}</a></li>
+                </volist>
+            </ul>
+        </div>
+        <div class="am-u-sm-9 am-u-md-9">
+            <h2>错误码列表</h2>
+
+
+            <div class="am-form-group">
+                <table class="am-table am-table-hover table-main" id="error-table">
+                    <thead>
+                    <tr>
+                        <th>error_code</th>
+                        <th>error_msg</th>
+                        <th>原因</th>
+                        <th>解决方案</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="errors" id="error">
+                        <tr>
+                            <td>
+                                <if condition="$error.interface_id gt 0">
+                                    <a href="{:U('item',array('pid' => $error['project_id'],'id' => $error['interface_id']))}">{$error.code}</a>
+                                    <else/>
+                                    {$error.code}
+                                </if>
+                            </td>
+                            <td>{$error.msg}</td>
+                            <td>{$error.reason|html_entity_decode}</td>
+                            <td>{$error.solution|html_entity_decode}</td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <br/><br/>
+    <hr>
+    <p align="center">© 2015 ApiWiki. Licensed under MIT license.</p>
+
+</block>

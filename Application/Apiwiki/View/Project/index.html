@@ -1,0 +1,66 @@
+<extend name="Public/admin"/>
+
+<block name="title">
+    <title>{$title} - ApiWiki</title>
+</block>
+
+<block name="head">
+    <link rel="stylesheet" href="__AM__/css/admin.css">
+</block>
+
+<block name="submenu">
+    <div class="am-panel am-panel-default admin-sidebar-panel">
+        <ul class="am-list admin-sidebar-list">
+            <include file="Public:projectMenu"/>
+        </ul>
+    </div>
+</block>
+
+<block name="body">
+    <div class="am-cf am-padding">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong> / <small>{$project.title}</small></div>
+    </div>
+
+    <hr/>
+
+    <div class="am-g">
+        <div class="am-u-md-6">
+            <div class="am-panel am-panel-default">
+                <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-1'}">接口动态<span class="am-icon-chevron-down am-fr" ></span></div>
+                <div class="am-panel-bd am-collapse am-in" id="collapse-panel-1">
+                    <ul class="am-list admin-content-file">
+                        <volist name="items" id="item">
+                            <li>
+                                <strong><span class="am-icon-check"></span> {$item.title} <small>{$item.update_time}</small></strong>
+                                <p>
+                                    {$project.base_url}{$item.url}
+                                    <a href="{:U('Index/item',array('pid' => $project['id'],'id' => $item['id']))}" target="_blank">查看</a>
+                                </p>
+                            </li>
+                        </volist>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="am-u-md-6">
+            <div class="am-panel am-panel-default">
+                <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-1'}">文档动态<span class="am-icon-chevron-down am-fr" ></span></div>
+                <div class="am-panel-bd am-collapse am-in" id="collapse-panel-1">
+                    <ul class="am-list admin-content-file">
+                        <volist name="docs" id="item">
+                            <li>
+                                <strong><span class="am-icon-check"></span> {$item.title} <small>{$item.update_time}</small></strong>
+                                <p>
+                                    {$item.detail|html_entity_decode|strip_tags|mb_substr_utf8=###,0,90}
+                                    <a href="{:U('Index/doc',array('pid' => $project['id'],'id' => $item['id']))}" target="_blank">查看</a>
+                                </p>
+                            </li>
+                        </volist>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</block>

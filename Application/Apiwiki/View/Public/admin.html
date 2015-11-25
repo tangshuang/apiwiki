@@ -1,0 +1,131 @@
+<!doctype html>
+<html class="no-js fixed-layout">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+
+    <block name="title"></block>
+
+    <link rel="stylesheet" href="__AM__/css/amazeui.min.css">
+    <link rel="stylesheet" href="__AM__/css/app.css">
+    <style>
+        .fixed-layout .admin-content, .fixed-layout .admin-sidebar,.am-offcanvas-bar {
+            overflow-y: hidden;
+        }
+    </style>
+
+    <block name="head"></block>
+</head>
+<body>
+
+
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Api Wiki 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a> 以获得更好的体验！</p>
+<![endif]-->
+
+<header class="am-topbar admin-header">
+    <div class="am-topbar-brand">
+        <strong>ApiWiki</strong> <small>开源开放的API文档系统</small>
+    </div>
+
+    <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+    <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+        <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list">
+            <li class="am-dropdown" data-am-dropdown>
+                <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+                    <span class="am-icon-users"></span> {$user['user_name']} <span class="am-icon-caret-down"></span>
+                </a>
+                <ul class="am-dropdown-content">
+                    <li><a href="{:U('User/setting')}"><span class="am-icon-cog"></span> 设置</a></li>
+                    <li><a href="{:U('Login/logout')}"><span class="am-icon-power-off"></span> 退出</a></li>
+                </ul>
+            </li>
+            <li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
+        </ul>
+    </div>
+</header>
+
+<div class="am-cf admin-main">
+    <!-- sidebar start -->
+    <div class="admin-sidebar am-offcanvas" id="admin-offcanvas">
+        <div class="am-offcanvas-bar admin-offcanvas-bar">
+
+            <ul class="am-list admin-sidebar-list">
+                <li><a href="{:U('Home/index')}"><span class="am-icon-tachometer"></span> 首页</a></li>
+                <li class="admin-parent">
+                    <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-share-alt-square"></span> 我的项目 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+                    <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
+                        <li><a href="{:U('Project/myList')}" class="am-cf"><span class="am-icon-th-list"></span> 项目列表</a></li>
+                        <li><a href="{:U('Project/add')}"><span class="am-icon-plus"></span> 添加项目</a></li>
+                    </ul>
+                </li>
+                <li><a href="{:U('Project/inList')}"><span class="am-icon-table"></span> 参与项目</a></li>
+            </ul>
+
+            <block name="submenu"></block>
+
+        </div>
+    </div>
+    <!-- sidebar end -->
+
+    <!-- content start -->
+    <div class="admin-content">
+
+        <block name="body"></block>
+
+        <footer>
+            <hr>
+            <p class="am-padding-left">© 2015 ApiWiki. Licensed under MIT license.</p>
+        </footer>
+    </div>
+    <!-- content end -->
+
+</div>
+
+<div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd"></div>
+        <div class="am-modal-bd"></div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+        </div>
+    </div>
+</div>
+
+<a href="#" class="am-icon-btn am-icon-th-list am-show-sm-only admin-menu" data-am-offcanvas="{target: '#admin-offcanvas'}"></a>
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="__STATIC__/jquery-2.1.4.min.js"></script>
+<!--<![endif]-->
+<!--[if lte IE 8 ]>
+<script src="__STATIC__/jquery-1.11.3.min.js"></script>
+<script src="__STATIC__/modernizr.js"></script>
+<script src="__AM__/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+<script src="__AM__/js/amazeui.min.js"></script>
+<script src="__AM__/js/app.js"></script>
+
+<block name="script"></block>
+
+<script>
+    $(document).ready(function(){
+        $(document).on('click','.alert-confirm',function(e){
+            var msg = '确定吗？';
+            if($(this).attr('alert-msg') != undefined)
+                msg = $(this).attr('alert-msg');
+            if(!confirm(msg)) {
+                return false;
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

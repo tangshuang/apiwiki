@@ -1,0 +1,48 @@
+<volist name="items" id="item">
+    <tr id="data-id-{$item['id']}" data-id="{$item['id']}" data-parent="{$item['parent_id']}" class="deep deep-{$deep} has-children children-count-{:count($item['children'])}">
+        <td>
+            {:str_repeat('<em>-</em>',$deep)}{$item.field}
+        </td>
+        <td>{$item.title}</td>
+        <td>{$item.required_text}</td>
+        <td>{$item.data_type}</td>
+        <td>{$item.example}</td>
+        <td>
+            {$item.detail|html_entity_decode}
+            <notempty name="$item['children']">
+                <br/>
+                ({:count($item['children'])}个子字段)
+            </notempty>
+        </td>
+        <td>
+            <div class="am-btn-toolbar">
+                <div class="am-btn-group am-btn-group-xs">
+                    <a class="am-btn am-btn-default am-btn-xs"
+                       data-am-modal="{target: '#data-dialog', closeViaDimmer: 0, width: 800, height: 570}"
+                       data-info='"dialogTitle":"编辑接口的传入参数",
+                                  "action":"{:U("Interface/editData",array("pid" => $project["id"],"type" => $type))}",
+                                  "id":"{$item.id}",
+                                  "parent_id":"{$item.parent_id}",
+                                  "field":"{$item.field}",
+                                  "title":"{$item.title}",
+                                  "required":"{$item.required}",
+                                  "data_type":"{$item.data_type}",
+                                  "example":"{$item.example|trim|str_replace="\n"," ",###|htmlentities=###,ENT_QUOTES}",
+                                  "detail":"{$item.detail|trim|str_replace="\n"," ",###|htmlentities=###,ENT_QUOTES}",
+                                  "sort":"{$item.sort}",
+                                  "do":"edit"'><span class="am-icon-edit"></span></a>
+                    <a class="am-btn am-btn-default am-btn-xs"
+                       data-am-modal="{target: '#data-dialog', closeViaDimmer: 0, width: 800, height: 570}"
+                       data-info='"dialogTitle":"添加子参数",
+                                  "action":"{:U("Interface/addData",array("pid" => $project["id"],"type" => $type))}",
+                                  "parent_id":"{$item.id}",
+                                  "do":"addSub"'><span class="am-icon-plus"></span></a>
+                    <a class="am-btn am-btn-default am-btn-xs" href="javascript:void(0)" data-ajax-url="{:U('deleteData',array('pid' => $project['id'],'type' => $type,'id' => $item['id']))}"><span class="am-icon-trash-o"></span></a>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <notempty name="item['children']">
+        {:R('Interface/dataTree', array($item['children'],$deep + 1,$type))}
+    </notempty>
+</volist>

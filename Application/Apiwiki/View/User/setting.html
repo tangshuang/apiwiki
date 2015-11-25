@@ -1,0 +1,63 @@
+<extend name="Public/admin"/>
+
+<block name="title">
+    <title>{$title} - ApiWiki</title>
+</block>
+
+<block name="head">
+    <link rel="stylesheet" href="__AM__/css/admin.css">
+</block>
+
+<block name="submenu">
+    <notempty name="project">
+        <div class="am-panel am-panel-default admin-sidebar-panel">
+            <ul class="am-list admin-sidebar-list">
+                <include file="Public:projectMenu"/>
+            </ul>
+        </div>
+    </notempty>
+</block>
+
+<block name="body">
+    <div class="am-cf am-padding">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong> / <small><notempty name="project">{$project.title} /</notempty> {$title}</small></div>
+    </div>
+
+    <hr/>
+
+    <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-8">
+            <form class="am-form am-form-horizontal" action="" method="post" enctype="multipart/form-data">
+                <div class="am-form-group">
+                    <label for="user_name" class="am-u-sm-3 am-form-label">用户名</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" id="user_name" name="user_name" placeholder="" value="{$user.user_name}">
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="old_password" class="am-u-sm-3 am-form-label">原密码</label>
+                    <div class="am-u-sm-9">
+                        <input type="password" id="old_password" name="old_password">
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="password" class="am-u-sm-3 am-form-label">新密码</label>
+                    <div class="am-u-sm-9">
+                        <input type="password" id="password" name="password">
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <div class="am-u-sm-9 am-u-sm-push-3">
+                        <button type="submit" class="am-btn am-btn-lg am-btn-primary am-fl">提 交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br/><br/>
+
+</block>

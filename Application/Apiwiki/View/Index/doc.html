@@ -1,0 +1,48 @@
+<extend name="Public/base"/>
+
+<block name="title">
+    <title>{$title} - ApiWiki</title>
+</block>
+
+<block name="head">
+    <style>
+        .header {
+            text-align: center;
+            margin-top: 1.6rem;
+        }
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            font-weight: normal;
+            margin: 0;
+            padding: 0;
+        }
+        em {
+            display: inline-block;
+            width: 1em;
+        }
+        .warn {
+            padding: 5px 15px;
+            background: #f1f1f1;
+        }
+    </style>
+</block>
+
+<block name="body">
+    <div class="header">
+        <h1>Api Wiki</h1>
+    </div>
+    <hr />
+    <div class="am-g">
+        <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+            <h2>{$document.title}</h2>
+            <div style="margin: 2em 0;font-size: .8em;color: #999;">{$document.create_time}</div>
+            <article>
+                {$document.detail|html_entity_decode}
+            </article>
+        </div>
+    </div>
+    <br>
+    <hr>
+    <p align="center">© 2015 ApiWiki. Licensed under MIT license.</p>
+</block>

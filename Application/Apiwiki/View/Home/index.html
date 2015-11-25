@@ -1,0 +1,90 @@
+<extend name="Public/admin"/>
+
+<block name="title">
+    <title>后台 - ApiWiki</title>
+</block>
+
+<block name="head">
+    <link rel="stylesheet" href="__AM__/css/admin.css">
+</block>
+
+<block name="submenu">
+    <div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+            <p><span class="am-icon-bookmark"></span> 简介</p>
+            <p>让程序员脱离APP与API之间的鸿沟，同时为其他程序员提供方便，以Wiki的形式，发布你的API文档。</p>
+        </div>
+    </div>
+</block>
+
+<block name="body">
+
+    <br/>
+    <br/>
+
+    <div class="am-g">
+        <div class="am-u-sm-12">
+            <notemtpy name="myList">
+                <table class="am-table am-table-bd am-table-striped admin-content-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>我的项目</th>
+                        <th>成员数量</th>
+                        <th>接口数量</th>
+                        <th>管理</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="myList" id="vo">
+                        <tr>
+                            <td>{$vo.id}</td>
+                            <td>{$vo.title}</td>
+                            <td>{$vo.member_count}</td>
+                            <td>{$vo.interface_count}</td>
+                            <td><a href="{:U('Project/index',array('pid' => $vo['id']))}" class="am-btn am-btn-default am-btn-xs"><span class="am-icon-cog"></span></a></td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+            </notemtpy>
+            <empty name="myList">
+                <p>你还没有创建任何项目，赶紧去<a href="{:U('Project/add')}">创建</a>一个吧</p>
+            </empty>
+        </div>
+    </div>
+
+
+    <notempty name="inList">
+
+    <hr/>
+
+    <div class="am-g">
+        <div class="am-u-sm-12">
+            <table class="am-table am-table-bd am-table-striped admin-content-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>参与项目</th>
+                    <th>接口数量</th>
+                    <th>查看</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="inList" id="vo">
+                    <tr>
+                        <td>{$vo.id}</td>
+                        <td>{$vo.title}</td>
+                        <td>{$vo.interface_count}</td>
+                        <td><a href="{:U('Index/detail',array('pid' => $vo['id']))}" class="am-btn am-btn-default am-btn-xs" target="_blank"><span class="am-icon-search"></span></a></td>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    </notempty>
+
+    <br><br>
+</block>

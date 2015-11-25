@@ -1,0 +1,49 @@
+<extend name="Public/admin"/>
+
+<block name="title">
+    <title>后台 我的项目列表 - ApiWiki</title>
+</block>
+
+<block name="head">
+    <link rel="stylesheet" href="__AM__/css/admin.css">
+    <style>
+        .admin-content-list li:nth-child(4n) {
+            border-right-width: 0;
+        }
+        .admin-content-list li:nth-child(5n) {
+            border-left-width: 0;
+        }
+        .admin-content-list li {
+            margin: 20px 0;
+        }
+    </style>
+</block>
+
+<block name="body">
+    <div class="am-cf am-padding">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong> / <small>{$title}</small></div>
+    </div>
+
+    <hr/>
+
+    <ul class="am-avg-sm-1 am-avg-md-4 am-margin am-padding am-text-center admin-content-list" style="border:0;">
+        <volist name="projects" id="item">
+            <li>
+                <img src="{:U($item['logo_url'],'','',false)}" width="120" height="120" style="margin-bottom: 10px;"><br/>
+                <span>{$item.title}</span><br/>
+                <span>{$item.amount}</span><br/>
+                <span>
+                    <a href="{:U('Index/detail',array('pid' => $item['id']))}" target="_blank">查看</a>
+                    <notempty name="isMine">
+                        <a href="{:U('Project/index',array('pid' => $item['id']))}">管理</a>
+                        <else/>
+                        <a href="{:U('Project/out',array('project_id' => $item['id']))}">退出</a>
+                    </notempty>
+                </span>
+            </li>
+        </volist>
+    </ul>
+
+    <br/><br/>
+
+</block>

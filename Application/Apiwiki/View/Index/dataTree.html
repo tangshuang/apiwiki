@@ -1,0 +1,21 @@
+<volist name="items" id="item">
+    <tr id="data-id-{$item['id']}" data-id="{$item['id']}" data-parent="{$item['parent_id']}" class="deep deep-{$deep} has-children children-count-{:count($item['children'])}">
+        <td>
+            {:str_repeat('<em>-</em>',$deep)}{$item.field}
+        </td>
+        <td>{$item.title}</td>
+        <td align="center">{$item.required_text}</td>
+        <td align="center">{$item.data_type}</td>
+        <td>{$item.example|html_entity_decode}</td>
+        <td>
+            {$item.detail|html_entity_decode}
+            <notempty name="$item['children']">
+                <br/>
+                ({:count($item['children'])}个子字段)
+            </notempty>
+        </td>
+    </tr>
+    <notempty name="item['children']">
+        {:R('Index/dataTree', array($item['children'],$deep + 1))}
+    </notempty>
+</volist>
