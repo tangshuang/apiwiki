@@ -74,18 +74,22 @@
                     <tr>
                         <th width="80">error_code</th>
                         <th width="150">error_msg</th>
-                        <th style="text-align: center" width="80">接口ID</th>
                         <th>原因</th>
-                        <th width="180">解决方案</th>
+                        <th>解决方案</th>
                         <th width="120">操作</th>
                     </tr>
                     </thead>
                     <tbody>
                     <volist name="errorData" id="error">
                         <tr>
-                            <td>{$error.code}</td>
+                            <td>
+                            	<neq name="error.interface_id" value="0">
+                            	<a href="{:U('edit',array('pid' => $project['id'],'id' => $error['interface_id']))}">{$error.code}</a>
+                            	<else/>
+                            	{$error.code}
+                            	</neq>
+                            </td>
                             <td>{$error.msg}</td>
-                            <td align="center"><neq name="error.interface_id" value="0"><a href="{:U('edit',array('pid' => $project['id'],'id' => $error['interface_id']))}">{$error.interface_id}</a></neq></td>
                             <td>{$error.reason}</td>
                             <td>{$error.solution}</td>
                             <td>

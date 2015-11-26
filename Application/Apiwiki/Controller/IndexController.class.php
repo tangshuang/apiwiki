@@ -35,6 +35,10 @@ class IndexController extends __ {
             $this->project = $project;
         }
     }
+    
+    public function index() {
+    	$this->redirect('Home/index');
+    }
 
     public function detail($pid) {
         $items = M('interface')->where(array('project_id' => $pid,'status' => 1))->order('sort desc')->select();
