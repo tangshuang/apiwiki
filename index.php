@@ -4,7 +4,7 @@
 if(version_compare(PHP_VERSION,'5.3.0','<'))  die('require PHP > 5.3.0 !');
 
 // 开启调试模式 建议开发阶段开启 部署阶段注释或者设为false
-define('APP_DEBUG',True);
+define('APP_DEBUG',false);
 
 // 绑定模块
 define('BIND_MODULE','Apiwiki');
@@ -21,7 +21,7 @@ define('RUNTIME_PATH', './Runtime/');
 /**
  * 一些常量  --------------------------------------------------------------------
  */
-define('AUTH_SALT','fsdfjlasdjfklasdjfkl');
+define('AUTH_SALT','dsafodf8908as90f8asd09f80asdf8ew3');
 
 define('NOW_TIME',$_SERVER['REQUEST_TIME']);
 define('NOW_DATE',date('Y-m-d',$_SERVER['REQUEST_TIME']));
