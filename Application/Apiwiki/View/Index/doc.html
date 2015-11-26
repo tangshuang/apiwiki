@@ -32,9 +32,26 @@
     <div class="header">
         <h1>Api Wiki</h1>
     </div>
+
     <hr />
+
     <div class="am-g">
-        <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+        <div class="am-u-sm-3 am-u-md-3">
+            <h2>{$project.title}</h2>
+            <p><strong>接口</strong></p>
+            <ul>
+                <volist name="list" id="vo">
+                    <li><a href="{:U('item',array('pid' => $project['id'],'id' => $vo['id']))}">{$vo.title}</a></li>
+                </volist>
+            </ul>
+            <p><strong>文档</strong></p>
+            <ul>
+                <volist name="docs" id="doc">
+                    <li><a href="{:U('doc',array('pid' => $project['id'],'id' => $doc['id']))}">{$doc.title}</a></li>
+                </volist>
+            </ul>
+        </div>
+        <div class="am-u-sm-9 am-u-md-9">
             <h2>{$document.title}</h2>
             <div style="margin: 2em 0;font-size: .8em;color: #999;">{$document.create_time}</div>
             <article>
@@ -42,7 +59,9 @@
             </article>
         </div>
     </div>
-    <br>
+
+    <br/><br/>
     <hr>
     <p align="center">© 2015 ApiWiki. Licensed under MIT license.</p>
+
 </block>

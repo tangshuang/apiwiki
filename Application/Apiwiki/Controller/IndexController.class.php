@@ -111,10 +111,15 @@ class IndexController extends __ {
         $this->display();
     }
 
-    public function doc($id) {
+    public function doc($pid,$id) {
         $document = M('document')->where(array('id' => $id))->find();
 
+        $items = M('interface')->where(array('project_id' => $pid,'status' => 1))->order('sort desc')->select();
+        $docs = M('document')->where(array('project_id' => $pid,'status' => 1))->order('sort desc')->select();
+
         $this->title = $document['title'];
+        $this->assign('list',$items);
+        $this->assign('docs',$docs);
         $this->assign('document',$document);
         $this->display();
     }
