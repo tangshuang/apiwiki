@@ -70,7 +70,10 @@ class InterfaceController extends __ {
 
         unset($items);
 
-        $errorData = M('interface_error')->where(array('interface_id' => $id))->order('sort desc')->select();
+        if($interface['errors'])
+            $errorData = M('interface_error')->where(array('code' => array('in',$interface['errors'])))->order('code asc')->select();
+        else
+            $errorData = array();
 
         $this->title = '编辑接口';
         $this->assign('interface',$interface);

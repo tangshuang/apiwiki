@@ -20,6 +20,7 @@ class DocumentController extends __ {
             $DocumentModel = M('document');
             $DocumentModel->create();
             $DocumentModel->create_time = NOW_DATETIME;
+            $DocumentModel->user_id = $this->user['id'];
             $DocumentModel->status = 1;
             $DocumentModel->add();
             $this->success('添加成功。',U('index',array('pid' => $pid)));

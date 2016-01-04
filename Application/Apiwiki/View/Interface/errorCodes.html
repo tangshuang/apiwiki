@@ -82,13 +82,7 @@
                     <tbody>
                     <volist name="errorData" id="error">
                         <tr>
-                            <td>
-                            	<neq name="error.interface_id" value="0">
-                            	<a href="{:U('edit',array('pid' => $project['id'],'id' => $error['interface_id']))}">{$error.code}</a>
-                            	<else/>
-                            	{$error.code}
-                            	</neq>
-                            </td>
+                            <td>{$error.code}</td>
                             <td>{$error.msg}</td>
                             <td>{$error.reason}</td>
                             <td>{$error.solution}</td>

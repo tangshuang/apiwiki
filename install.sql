@@ -61,6 +61,7 @@ CREATE TABLE `aw_interface_parameter` (
   `example` TINYTEXT NOT NULL COMMENT '示例值',
   `detail` TEXT NOT NULL COMMENT '详细描述',
   `sort` SMALLINT(4) NOT NULL COMMENT '排序值',
+	`update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`),
   KEY (`interface_id`),
   KEY (`parent_id`)
@@ -77,6 +78,7 @@ CREATE TABLE `aw_interface_data` (
   `example` TINYTEXT NOT NULL COMMENT '示例值',
   `detail` TEXT NOT NULL COMMENT '详细描述',
   `sort` SMALLINT(4) NOT NULL COMMENT '排序值',
+  `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`),
   KEY (`interface_id`),
   KEY (`parent_id`)
@@ -91,6 +93,7 @@ CREATE TABLE `aw_interface_error` (
   `reason` TEXT NOT NULL COMMENT '参数错误的原因',
   `solution` TEXT NOT NULL COMMENT '解决办法',
   `sort` SMALLINT(4) NOT NULL DEFAULT '0' COMMENT '排序。不过再统一列表中，按照code升序排',
+  `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) COMMENT='错误码表';
 

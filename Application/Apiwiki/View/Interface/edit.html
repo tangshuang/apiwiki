@@ -59,7 +59,7 @@
 
     <div class="am-g">
         <div class="am-u-sm-12 am-u-md-8 am-u-sm-centered">
-            <form class="am-form" action="" method="post">
+            <form class="am-form" action="" method="post" id="interface-form">
                 <div class="am-form-group">
                     <label for="title" class="am-form-label">接口名称</label>
                     <input type="text" id="title" name="title" placeholder="" value="{$interface.title}">
@@ -152,16 +152,10 @@
                 </div>
 
                 <div class="am-form-group">
-                    <a type="button" class="am-btn am-btn-default am-fr"
-                       data-am-modal="{target: '#error-dialog', closeViaDimmer: 0, width: 800, height: 570}"
-                       data-info='"type":"error",
-                                  "dialog":"#error-dialog",
-                                  "form":"#error-dialog-form",
-                                  "dialogTitle":"添加错误码",
-                                  "action":"{:U("Interface/addData",array("pid" => $project["id"],"type" => "error"))}",
-                                  "do":"add",
-                                  "target":"#error-table"'><span class="am-icon-plus"></span> 添加错误码</a>
                     <label class="am-form-label">错误码</label>
+                    <!-- TODO: 后期可以考虑通过模态框打开后，选择对应的错误码实现快捷完成 -->
+                    <input type="text" id="errors" name="errors" placeholder="" value="{$interface.errors}">
+                    <small>填写格式：3,45,4032,4543 。打开<a href="{:U('index/code',array('pid' => $project['id']))}" target="_blank">错误码列表</a>，查看本项目的所有错误码。</small>
                     <table class="am-table am-table-hover table-main" id="error-table">
                         <thead>
                         <tr>
@@ -169,7 +163,6 @@
                             <th>error_msg</th>
                             <th>原因</th>
                             <th>解决方案</th>
-                            <th width="120">操作</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -179,34 +172,10 @@
                                 <td>{$error.msg}</td>
                                 <td>{$error.reason}</td>
                                 <td>{$error.solution}</td>
-                                <td>
-                                    <div class="am-btn-toolbar">
-                                        <div class="am-btn-group am-btn-group-xs">
-                                            <a class="am-btn am-btn-default am-btn-xs"
-                                               data-am-modal="{target: '#error-dialog', closeViaDimmer: 0, width: 800, height: 570}"
-                                               data-info='"type":"error",
-                                                          "dialog":"#error-dialog",
-                                                          "form":"#error-dialog-form",
-                                                          "dialogTitle":"编辑接口的错误码",
-                                                          "action":"{:U("Interface/editData",array("pid" => $project["id"],"type" => "error"))}",
-                                                          "id":"{$error.id}",
-                                                          "code":"{$error.code}",
-                                                          "msg":"{$error.msg}",
-                                                          "reason":"{$error.reason|trim|str_replace="\n"," ",###}",
-                                                          "solution":"{$error.solution|trim|str_replace="\n"," ",###}",
-                                                          "sort":"{$error.sort}",
-                                                          "is_global":"{$error.is_global}",
-                                                          "do":"edit",
-                                                          "target":"#error-table"'><span class="am-icon-edit"></span></a>
-                                            <a class="am-btn am-btn-default am-btn-xs confirm" href="javascript:void(0)" data-ajax-url="{:U('deleteData',array('pid' => $project['id'],'type' => 'error','id' => $error['id']))}"><span class="am-icon-trash-o"></span></a>
-                                        </div>
-                                    </div>
-                                </td>
                             </tr>
                         </volist>
                         </tbody>
                     </table>
-                    <small>这里添加的错误码，会在错误码列表中统一展示。</small>
                 </div>
 
 
@@ -229,7 +198,7 @@
                                 <button type="submit" class="am-btn am-btn-lg am-btn-block am-btn-primary">提 交</button>
                             </div>
                             <div class="am-u-sm-6 am-padding-0">
-                                <a href="{:U('Index/detail',array('tid' => $interface['id']))}" target="_blank" class="am-btn am-btn-lg am-btn-block am-btn-success">预 览</a>
+                                <a href="{:U('Index/item',array('pid' => $project['id'],'id' => $interface['id']))}" target="_blank" class="am-btn am-btn-lg am-btn-block am-btn-success">预 览</a>
                             </div>
                         </div>
                     <else/>
@@ -515,14 +484,16 @@
         // 静态删除参数
         $(document).on('click','a[data-ajax-url]',function(e){
             e.preventDefault();
-            var $this = $(this),url = $this.attr('data-ajax-url'), $node = $this.parent().parent().parent().parent();
+            var $this = $(this);
+            confirm_url = $this.attr('data-ajax-url'); // modal必须使用全局参数
+            $node = $this.parent().parent().parent().parent(); // 同上
             $confirm = $('#my-confirm');
             $confirm.find('.am-modal-hd').text('删除提示');
             $confirm.find('.am-modal-bd').html('删除后数据将无法恢复，相关子元素也会被一并删除，请谨慎操作！<br>确定删除吗？')
             $confirm.modal({
                 relatedTarget: this,
                 onConfirm: function(options) {
-                    $.get(url,function(result){
+                    $.get(confirm_url,function(result){
                         if(result.status == 1) {
                             $node.remove();
                         }
@@ -538,6 +509,29 @@
                     });
                 },
                 onCancel: function() {}
+            });
+        });
+        // 错误码列表修改
+        var lasterrors = $('[name=errors]').val();
+        $('[name=errors]').on('blur',function(){
+            var $form = $('#interface-form'), action = $form.attr('action'), data = $form.serialize();
+            var errors = $(this).val();
+            if(errors == lasterrors)
+                return;
+
+            $.post(action,data,function(result){
+                if(result.status == 1) {
+                    var url = window.location.href;
+                    $.get(url,function(data){ // 重新获取当前页面的html，并抓取对应的区域内的HTML进行替换，从而实现无刷新页面加载
+                        var table_id = '#error-table';
+                        var $html = $(data),html = $html.find(table_id).html();
+
+                        console.log(html)
+
+                        $(table_id).html(html);
+                        lasterrors = errors;
+                    });
+                }
             });
         });
     </script>

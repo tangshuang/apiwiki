@@ -75,7 +75,10 @@ class IndexController extends __ {
         }
         $returnData = $items;
 
-        $errorData = M('interface_error')->where(array('interface_id' => $id))->order('sort desc')->select();
+        if($interface['errors'])
+            $errorData = M('interface_error')->where(array('code' => array('in',$interface['errors'])))->order('code asc')->select();
+        else
+            $errorData = array();
 
         $items = $InterfaceModel->where(array('project_id' => $pid,'status' => 1))->order('sort desc')->select();
         $docs = M('document')->where(array('project_id' => $pid,'status' => 1))->order('sort desc')->select();

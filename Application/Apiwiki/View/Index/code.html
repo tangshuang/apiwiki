@@ -102,13 +102,7 @@
                     <tbody>
                     <volist name="errors" id="error">
                         <tr>
-                            <td>
-                                <if condition="$error.interface_id gt 0">
-                                    <a href="{:U('item',array('pid' => $error['project_id'],'id' => $error['interface_id']))}">{$error.code}</a>
-                                    <else/>
-                                    {$error.code}
-                                </if>
-                            </td>
+                            <td>{$error.code}</td>
                             <td>{$error.msg}</td>
                             <td>{$error.reason|html_entity_decode}</td>
                             <td>{$error.solution|html_entity_decode}</td>
