@@ -2,12 +2,12 @@
 return array(
     /* 数据库配置 */
     'DB_TYPE'   => 'mysql',         // 数据库类型
-    'DB_HOST'   => 'localhost',     // 服务器地址
-    'DB_NAME'   => 'apiwiki',       // 数据库名
-    'DB_USER'   => 'root',              // 用户名
-    'DB_PWD'    => 'AJRice123#',              // 密码
-    'DB_PORT'   => '3306',          // 端口
-    'DB_PREFIX' => 'aw_',           // 数据库表前缀
+    'DB_HOST'   => DB_HOST,     // 服务器地址
+    'DB_NAME'   => DB_NAME,       // 数据库名
+    'DB_USER'   => DB_USER,              // 用户名
+    'DB_PWD'    => DB_PASSWORD,              // 密码
+    'DB_PORT'   => DB_PORT,          // 端口
+    'DB_PREFIX' => DB_PREFIX,           // 数据库表前缀
 
     /* URL模式 */
     'URL_CASE_INSENSITIVE'  =>  false,     // 默认false 表示URL区分大小写 true则表示不区分大小写
@@ -20,8 +20,7 @@ return array(
         '__IMG__'       => site_url('/Public/'.MODULE_NAME . '/img'),
         '__CSS__'       => site_url('/Public/'.MODULE_NAME . '/css'),
         '__JS__'        => site_url('/Public/'.MODULE_NAME . '/js'),
-        '__ASSETS__'    => site_url('/Public/Assets'),
-        '__AM__'        => site_url('/Public/Assets/AmazeUI'),
+        '__AM__'        => site_url('/Public/Static/AmazeUI'),
     ),
 
     // Trace开关

@@ -21,13 +21,10 @@ define('RUNTIME_PATH', './Runtime/');
 /**
  * 一些常量  --------------------------------------------------------------------
  */
-define('AUTH_SALT','fsdfjlasdjfklasdjfkl');
-
-define('NOW_TIME',$_SERVER['REQUEST_TIME']);
-define('NOW_DATE',date('Y-m-d',$_SERVER['REQUEST_TIME']));
-define('NOW_DATETIME',date('Y-m-d H:i:s',$_SERVER['REQUEST_TIME']));
 
 define('ABS_PATH',dirname(__FILE__)); // 公开根目录
+
+include ABS_PATH.'/config.php';
 
 /**
  * 创建一个url函数，可以在所有地方使用
