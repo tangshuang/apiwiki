@@ -87,7 +87,7 @@
         </div>
         <div class="am-u-sm-9 am-u-md-9">
             <h2>{$interface.title}</h2>
-            <p>{$interface.description|html_entity_decode}</p>
+            <p>{$interface.description|html_entity_decode|nl2br}</p>
             <h4>接口地址</h4>
             <p>{$project.base_url}{$interface.url}</p>
             <h4>请求模式</h4>
