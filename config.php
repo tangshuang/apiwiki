@@ -5,7 +5,7 @@ define('DB_NAME','');
 define('DB_USER','root');
 define('DB_PASSWORD','');
 define('DB_PORT','3306');
-define('DB_PREFIX','raw_');
+define('DB_PREFIX','aw_');
 
 define('AUTH_SALT','fsdfjlasf.239*asdjfkl');
 
