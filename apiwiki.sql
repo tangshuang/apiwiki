@@ -38,7 +38,7 @@ CREATE TABLE `aw_project_member` (
 CREATE TABLE `aw_interface` (
   `id` INT(10) NOT NULL AUTO_INCREMENT,
   `project_id` INT(10) NOT NULL COMMENT '所属项目ID',
-  `title` VARCHAR(32) NOT NULL COMMENT '接口名称',
+  `title` VARCHAR(32) CHARACTER SET utf8 NOT NULL COMMENT '接口名称',
   `description` TEXT CHARACTER SET utf8 NOT NULL COMMENT '接口描述',
   `url` VARCHAR(255) NOT NULL COMMENT 'URL，除去BASE URL部分和group url部分',
   `method` VARCHAR(16) NOT NULL COMMENT '数据传输方式：1:POST|2:GET|3:PUT',
@@ -120,6 +120,5 @@ CREATE TABLE `aw_comment` (
   `status` TINYINT(1) NOT NULL COMMENT '状态。-1：删除；0：草稿；1：公开',
   PRIMARY KEY (`id`),
   KEY (`parent_id`),
-  KEY (`tid`),
   KEY (`user_id`)
 );
